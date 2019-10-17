@@ -1,0 +1,18 @@
+html,
+body {
+  width: 1920px;
+  height: 1080px;
+  margin: 0;
+  background: #228b22;
+}
+canvas {
+  position: absolute;
+  width: 1920px;
+  height: 1080px;
+  color: #228b22;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}

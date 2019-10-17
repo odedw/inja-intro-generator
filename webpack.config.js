@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const nodeEnv = process.env.NODE_ENV || "development";
 const isProd = nodeEnv === "production";
 
@@ -11,7 +12,7 @@ const plugins = [
     }
   }),
   new HtmlWebpackPlugin({
-    title: "Typescript Webpack Starter",
+    title: "Inja Intro Generator",
     template: "!!ejs-loader!src/index.html"
   }),
   new webpack.LoaderOptionsPlugin({
@@ -21,7 +22,8 @@ const plugins = [
         failOnHint: true
       }
     }
-  })
+  }),
+  new CopyWebpackPlugin([{ from: "lib", to: "lib" }])
 ];
 
 var config = {
