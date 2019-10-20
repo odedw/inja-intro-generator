@@ -41,30 +41,6 @@ export default class Renderer {
     }
   }
 
-  // onDraw(event) {
-  //   if (!mouseDown) return;
-
-  //   const rect = canvas.getBoundingClientRect();
-  //   const mousePos = {
-  //     x: (event.clientX * canvas.width) / canvas.clientWidth,
-  //     y: (event.clientY * canvas.height) / canvas.clientHeight
-  //   };
-  //   const pos = {
-  //     i: ~~(mousePos.y / cellHeight),
-  //     j: ~~(mousePos.x / cellWidth)
-  //   };
-
-  //   this.onDraw(pos.i, pos.j);
-  // };
-
-  // canvas.addEventListener("mousedown", evt => {
-  //   mouseDown = true;
-  //   onDraw(evt);
-  // });
-
-  // canvas.addEventListener("mousemove", onDraw);
-  // canvas.addEventListener("mouseup", evt => (mouseDown = false));
-
   hexToRgb(hex: string) {
     const result =
       /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || "#000000";
@@ -121,13 +97,10 @@ export default class Renderer {
       const index: any = arr[i];
       const color =
         world.cells[index] === 1
-          ? this.liveColor //this.colors[world.neighbours(index)]
+          ? this.colors[world.neighbours(index)]
           : this.deadColor;
       this.fillSquare(index % this.cols, Math.floor(index / this.cols), color);
     }
-    // if (this.model.renderCenter) {
-    //   fillSquare(Math.round(cols / 2), Math.round(rows / 2), liveColor);
-    // }
     this.context.putImageData(this.image, 0, 0);
 
     // encoder.addFrame(context);

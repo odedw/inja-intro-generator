@@ -95,7 +95,4 @@ export default class Engine {
     window.requestAnimationFrame(this.tick.bind(this));
   }
 
-  // onDraw (i:number, j:number) {
-  //   this.currentWorld.cross(i, j);
-  // };
 }

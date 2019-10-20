@@ -57,14 +57,6 @@ export default class World {
     this.cells[i] = val;
   }
 
-  // cross(i: number, j: number) {
-  //   if (i - 1 > 0) this.cells[this.index(i - 1, j)] = 1;
-  //   if (j - 1 > 0) this.cells[this.index(i, j - 1)] = 1;
-  //   this.cells[this.index(i, j)] = 1;
-  //   if (j + 1 > this.cols) this.cells[this.index(i, j + 1)] = 1;
-  //   if (i + 1 < this.rows) this.cells[this.index(i + 1, j)] = 1;
-  // }
-
   count(a: number, b: number) {
     return a + this.cells[b];
   }
