@@ -33,6 +33,9 @@ export default class Options {
     rulesFolder.add(this.model, "birth").listen();
     rulesFolder.add(this.model, "survival").listen();
     rulesFolder.add(this, "randomRules").name("random");
+
+    gui.add(this.model, "title");
+    gui.closed = true;
   }
 
   randomRules() {

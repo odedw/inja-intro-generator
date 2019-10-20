@@ -24,11 +24,11 @@ window.addEventListener("load", () => {
     if (ev.keyCode == 32) {
       //space
       reset();
-    }
-    // else if (ev.keyCode == 82) {
-    //   //r
-    //   this.model.randomStart = !this.model.randomStart;
-    // } else if (ev.keyCode == 67) {
+    } else if (ev.keyCode == 82) {
+      //r
+      options.randomRules();
+      reset();
+    } //else if (ev.keyCode == 67) {
     //   //c
     //   this.methods.random();
     // } else if (ev.keyCode == 66) {
