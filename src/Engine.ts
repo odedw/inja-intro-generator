@@ -1,5 +1,5 @@
 import World from "./World";
-type Model = { birth: string; survival: string; randomStart: boolean };
+import { Model } from "./Options";
 export default class Engine {
   cols: number;
   rows: number;
@@ -94,5 +94,4 @@ export default class Engine {
     this.isRunning = true;
     window.requestAnimationFrame(this.tick.bind(this));
   }
-
 }

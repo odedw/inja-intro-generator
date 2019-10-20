@@ -1,8 +1,9 @@
 import "./styles.css";
 import Engine from "./Engine";
 import Renderer from "./CanvasRenderer";
+import Options from "./Options";
 
-const pixelsPerCell = 4,
+const pixelsPerCell = 5,
   cols = Math.ceil(window.innerWidth / pixelsPerCell),
   rows = Math.ceil(window.innerHeight / pixelsPerCell),
   renderer = new Renderer(cols, rows, pixelsPerCell, pixelsPerCell),
@@ -12,49 +13,37 @@ const pixelsPerCell = 4,
     renderer.render.bind(renderer), //onTick
     30 //desired fps
   );
-// renderer.onDraw = engine.onDraw;
-let first = true;
+
 window.addEventListener("load", () => {
-  // mixpanel.track("View");
-  // const gui = new dat.GUI();
-  // const options = new Options(
-  //   gui,
-  //   model => {
-  //     renderer.reset(model);
-  //     if (first) {
-  //       engine.start(model);
-  //       first = false;
-  //     } else {
-  //       engine.pause();
-  //     }
-  //   },
-  //   engine.pause,
-  //   engine.play
-  // );
-  // options.methods.reset();
-  const model = {
-    birth: "3",
-    survival: "23",
-    randomStart: true,
-    colors: [
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF",
-      "#FFFFFF"
-    ],
-    visible: true
-    // renderCenter: false
-  };
-  renderer.reset(model);
-  if (first) {
-    engine.start(model);
-    first = false;
-  } else {
-    engine.pause();
+  const options = new Options();
+  function reset() {
+    renderer.reset(options.model);
+    engine.start(options.model);
   }
+  document.onkeydown = ev => {
+    if (ev.keyCode == 32) {
+      //space
+      reset();
+    }
+    // else if (ev.keyCode == 82) {
+    //   //r
+    //   this.model.randomStart = !this.model.randomStart;
+    // } else if (ev.keyCode == 67) {
+    //   //c
+    //   this.methods.random();
+    // } else if (ev.keyCode == 66) {
+    //   //c
+    //   this.methods.randomRules();
+    // } else if (ev.keyCode == 68) {
+    //   //d
+    //   document.getElementsByClassName(
+    //     "close-button"
+    //   )[0].style.visibility = this.model.visible ? "hidden" : "initial";
+    //   this.model.visible = !this.model.visible;
+    // } else if (ev.keyCode == 69) {
+    //   this.model.renderCenter = !this.model.renderCenter;
+    // }
+  };
+
+  reset();
 });
