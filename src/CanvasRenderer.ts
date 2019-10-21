@@ -8,8 +8,9 @@ export default class Renderer {
   cellWidth: number;
   cellHeight: number;
   imageData: Int32Array;
-  liveColor = 0xff | (0xff << 8) | (0xff << 16) | (0xff << 24);
-  deadColor = 0x22 | (0x8b << 8) | (0x22 << 16) | (0xff << 24);
+  // liveColor = 0xff | (0xff << 8) | (0xff << 16) | (0xff << 24);
+  // deadColor = 0x22 | (0x8b << 8) | (0x22 << 16) | (0xff << 24);
+  deadColor = 0x00 | (0x00 << 8) | (0x00 << 16) | (0x00 << 24);
   colors: any;
   image: ImageData;
   model: any;

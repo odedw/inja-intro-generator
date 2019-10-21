@@ -3,6 +3,7 @@
   "deprecated": false,
   "description": "",
   "devDependencies": {
+    "@types/css-font-loading-module": "0.0.2",
     "@types/dat.gui": "^0.7.5",
     "awesome-typescript-loader": "^5.2.0",
     "copy-webpack-plugin": "^5.0.4",

@@ -3,15 +3,27 @@ body {
   width: 1920px;
   height: 1080px;
   margin: 0;
-  background: #228b22;
+  background: black;
 }
-canvas {
+#canvas {
   position: absolute;
   width: 1920px;
   height: 1080px;
-  color: #228b22;
 }
 
+#init-canvas {
+  position: absolute;
+  width: 480px;
+  height: 270px;
+  display: none;
+}
+
+h1 {
+  color: white;
+  font-size: 240px;
+  position: absolute;
+  font-family: "PT Mono", monospace;
+}
 * {
   padding: 0;
   margin: 0;

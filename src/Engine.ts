@@ -1,5 +1,6 @@
 import World from "./World";
 import { Model } from "./Options";
+import Initializer from "./Initializer";
 export default class Engine {
   cols: number;
   rows: number;
@@ -15,12 +16,20 @@ export default class Engine {
   birth = "";
   survival = "";
   randomStart = false;
+  initializer: Initializer;
 
-  constructor(cols: number, rows: number, onTick: any, desiredFps: number) {
+  constructor(
+    cols: number,
+    rows: number,
+    onTick: any,
+    desiredFps: number,
+    initializer: Initializer
+  ) {
     this.cols = cols;
     this.rows = rows;
     this.msPerFrame = 1000 / desiredFps;
     this.onTick = onTick;
+    this.initializer = initializer;
   }
 
   computeNextState(): Set<any> {
@@ -68,8 +77,8 @@ export default class Engine {
   }
 
   setModel(model: Model) {
-    this.birth = model.birth || "3";
-    this.survival = model.survival || "23";
+    this.birth = model.birth;
+    this.survival = model.survival;
     for (let i = 0; i < 8; i++) {
       this.birthMap[i] = this.birth.indexOf(i.toString()) >= 0 ? 1 : 0;
       this.survivalMap[i] = this.survival.indexOf(i.toString()) >= 0 ? 1 : 0;
@@ -79,11 +88,14 @@ export default class Engine {
   }
 
   start(model: Model) {
+    this.isRunning = false;
     this.setModel(model);
     this.currentWorld = new World(this.rows, this.cols, this.randomStart);
     this.nextWorld = new World(this.rows, this.cols);
-    this.isRunning = true;
-    window.requestAnimationFrame(this.tick.bind(this));
+    this.initializer.init(this.currentWorld).then(() => {
+      this.isRunning = true;
+      window.requestAnimationFrame(this.tick.bind(this));
+    });
   }
 
   pause() {

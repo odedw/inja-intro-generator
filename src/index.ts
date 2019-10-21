@@ -2,20 +2,23 @@ import "./styles.css";
 import Engine from "./Engine";
 import Renderer from "./CanvasRenderer";
 import Options from "./Options";
+import Initializer from "./Initializer";
 
-const pixelsPerCell = 5,
+const pixelsPerCell = 4,
   cols = Math.ceil(window.innerWidth / pixelsPerCell),
   rows = Math.ceil(window.innerHeight / pixelsPerCell),
   renderer = new Renderer(cols, rows, pixelsPerCell, pixelsPerCell),
+  options = new Options(),
+  initializer = new Initializer(options, renderer),
   engine = new Engine(
     cols, //number of columns
     rows, //number of rows
     renderer.render.bind(renderer), //onTick
-    30 //desired fps
+    30, //desired fps
+    initializer
   );
 
 window.addEventListener("load", () => {
-  const options = new Options();
   function reset() {
     renderer.reset(options.model);
     engine.start(options.model);

@@ -13,7 +13,7 @@ export default class Options {
   model: Model = {
     birth: "3",
     survival: "23",
-    randomStart: true,
+    randomStart: false,
     title: "inja",
     colors: [
       "#FFFFFF",
