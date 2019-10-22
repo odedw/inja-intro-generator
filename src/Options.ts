@@ -7,6 +7,7 @@ export type Model = {
   title: string;
   subtitle?: string;
   colors: string[];
+  recordTime: number;
 };
 
 export default class Options {
@@ -25,7 +26,8 @@ export default class Options {
       "#FFFFFF",
       "#FFFFFF",
       "#FFFFFF"
-    ]
+    ],
+    recordTime: 0
   };
   constructor() {
     const gui = new dat.GUI();
@@ -33,6 +35,8 @@ export default class Options {
     rulesFolder.add(this.model, "birth").listen();
     rulesFolder.add(this.model, "survival").listen();
     rulesFolder.add(this, "randomRules").name("random");
+
+    gui.add(this.model, "recordTime").listen();
 
     gui.add(this.model, "title");
     gui.closed = true;

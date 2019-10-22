@@ -4,6 +4,7 @@ import Renderer from "./CanvasRenderer";
 import Options from "./Options";
 import Initializer from "./Initializer";
 
+let startTime = performance.now();
 const pixelsPerCell = 4,
   cols = Math.ceil(window.innerWidth / pixelsPerCell),
   rows = Math.ceil(window.innerHeight / pixelsPerCell),
@@ -26,18 +27,20 @@ window.addEventListener("load", () => {
   document.onkeydown = ev => {
     if (ev.keyCode == 32) {
       //space
+      let startTime = performance.now();
       reset();
     } else if (ev.keyCode == 82) {
       //r
       options.randomRules();
+      let startTime = performance.now();
       reset();
-    } //else if (ev.keyCode == 67) {
-    //   //c
-    //   this.methods.random();
-    // } else if (ev.keyCode == 66) {
-    //   //c
-    //   this.methods.randomRules();
-    // } else if (ev.keyCode == 68) {
+    } else if (ev.keyCode == 67) {
+      //c
+      options.model.recordTime = Math.round(performance.now() - startTime);
+      console.log(options.model.recordTime);
+    } else if (ev.keyCode == 83) {
+      //s
+    } //else if (ev.keyCode == 68) {
     //   //d
     //   document.getElementsByClassName(
     //     "close-button"

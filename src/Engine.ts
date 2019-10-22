@@ -17,6 +17,8 @@ export default class Engine {
   survival = "";
   randomStart = false;
   initializer: Initializer;
+  targetFps: number;
+  currentFps: number;
 
   constructor(
     cols: number,
@@ -27,7 +29,7 @@ export default class Engine {
   ) {
     this.cols = cols;
     this.rows = rows;
-    this.msPerFrame = 1000 / desiredFps;
+    this.targetFps = desiredFps;
     this.onTick = onTick;
     this.initializer = initializer;
   }
@@ -68,6 +70,11 @@ export default class Engine {
       this.onTick(this.currentWorld, diff);
       this.lastTickTime = performance.now();
       const timeForFrame = this.lastTickTime - startTime;
+      if (this.currentFps < this.targetFps) {
+        this.currentFps+=0.5;
+        this.calculateMsPerFrame();
+        // console.log(`fps: ${this.currentFps}`);
+      }
       this.msTillNextFrame = this.msPerFrame - timeForFrame;
     } else {
       this.lastTickTime = performance.now();
@@ -87,11 +94,17 @@ export default class Engine {
     this.randomStart = model.randomStart;
   }
 
+  calculateMsPerFrame() {
+    this.msPerFrame = 1000 / this.currentFps;
+  }
+
   start(model: Model) {
     this.isRunning = false;
     this.setModel(model);
     this.currentWorld = new World(this.rows, this.cols, this.randomStart);
     this.nextWorld = new World(this.rows, this.cols);
+    this.currentFps = 20;
+    this.calculateMsPerFrame();
     this.initializer.init(this.currentWorld).then(() => {
       this.isRunning = true;
       window.requestAnimationFrame(this.tick.bind(this));
