@@ -7,7 +7,8 @@ export type Model = {
   title: string;
   subtitle?: string;
   colors: string[];
-  recordTime: number;
+  recordingTime: number;
+  isRecording: boolean;
 };
 
 export default class Options {
@@ -27,7 +28,8 @@ export default class Options {
       "#FFFFFF",
       "#FFFFFF"
     ],
-    recordTime: 0
+    recordingTime: 0,
+    isRecording: false
   };
   constructor() {
     const gui = new dat.GUI();
@@ -36,7 +38,7 @@ export default class Options {
     rulesFolder.add(this.model, "survival").listen();
     rulesFolder.add(this, "randomRules").name("random");
 
-    gui.add(this.model, "recordTime").listen();
+    gui.add(this.model, "recordingTime").listen();
 
     gui.add(this.model, "title");
     gui.closed = true;

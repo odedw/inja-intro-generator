@@ -1,6 +1,7 @@
 import World from "./World";
 import { Model } from "./Options";
 import Initializer from "./Initializer";
+
 export default class Engine {
   cols: number;
   rows: number;
@@ -19,6 +20,7 @@ export default class Engine {
   initializer: Initializer;
   targetFps: number;
   currentFps: number;
+  encoder: any;
 
   constructor(
     cols: number,
@@ -71,7 +73,7 @@ export default class Engine {
       this.lastTickTime = performance.now();
       const timeForFrame = this.lastTickTime - startTime;
       if (this.currentFps < this.targetFps) {
-        this.currentFps+=0.5;
+        this.currentFps += 0.5;
         this.calculateMsPerFrame();
         // console.log(`fps: ${this.currentFps}`);
       }
@@ -105,8 +107,9 @@ export default class Engine {
     this.nextWorld = new World(this.rows, this.cols);
     this.currentFps = 20;
     this.calculateMsPerFrame();
+    
     this.initializer.init(this.currentWorld).then(() => {
-      this.isRunning = true;
+      this.isRunning = true;     
       window.requestAnimationFrame(this.tick.bind(this));
     });
   }
