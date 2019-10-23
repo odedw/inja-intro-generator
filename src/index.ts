@@ -4,6 +4,7 @@ import Renderer from "./CanvasRenderer";
 import Options from "./Options";
 import Initializer from "./Initializer";
 import World from "./World";
+import Recorder from "./Recorder";
 
 declare global {
   interface Window {
@@ -21,25 +22,17 @@ const pixelsPerCell = 4,
   engine = new Engine(
     cols, //number of columns
     rows, //number of rows
-    onTick,
+    onNextState,
     30, //desired fps
     initializer
-  );
-let encoder: any = undefined;
-let timeLeftInRecording = 0;
-function onTick(world: World, diff: any) {
-  if (options.model.isRecording && encoder) {
-    encoder.setDelay(this.msPerFrame); //go to next frame every n milliseconds
-    encoder.addFrame(renderer.getFrame());
-    timeLeftInRecording -= this.msPerFrame;
-    console.log(`timeLeftInRecording ${timeLeftInRecording}`);
-    if (timeLeftInRecording <= 0) {
-      engine.pause();
-      encoder.finish();
-      encoder.download("download.gif");
-    }
-  }
+  ),
+  recorder = new Recorder(() => (options.model.isRecording = false));
+
+function onNextState(world: World, diff: any) {
   renderer.render(world, diff);
+  if (options.model.isRecording) {
+    recorder.addFrame(renderer.context);
+  }
 }
 
 window.addEventListener("load", () => {
@@ -47,12 +40,7 @@ window.addEventListener("load", () => {
     renderer.reset(options.model);
     startTime = performance.now();
     if (options.model.isRecording) {
-      encoder = new window.GIFEncoder();
-      encoder.setRepeat(0);
-      encoder.start();
-      timeLeftInRecording = options.model.recordingTime;
-      // encoder.setDelay(21\); //go to next frame every n milliseconds
-      // encoder.addFrame(renderer.getFrame());
+      recorder.start(options.model.recordingTime);
     }
     engine.start(options.model);
   }
@@ -68,20 +56,11 @@ window.addEventListener("load", () => {
     } else if (ev.keyCode == 67) {
       //c
       options.model.recordingTime = Math.round(performance.now() - startTime);
-      console.log(options.model.recordingTime);
     } else if (ev.keyCode == 83) {
       //s
       options.model.isRecording = true;
       reset();
-    } //else if (ev.keyCode == 68) {
-    //   //d
-    //   document.getElementsByClassName(
-    //     "close-button"
-    //   )[0].style.visibility = this.model.visible ? "hidden" : "initial";
-    //   this.model.visible = !this.model.visible;
-    // } else if (ev.keyCode == 69) {
-    //   this.model.renderCenter = !this.model.renderCenter;
-    // }
+    }
   };
 
   reset();
