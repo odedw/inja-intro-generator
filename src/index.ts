@@ -6,12 +6,6 @@ import Initializer from "./Initializer";
 import World from "./World";
 import Recorder from "./Recorder";
 
-declare global {
-  interface Window {
-    GIFEncoder: any;
-  }
-}
-
 let startTime = performance.now();
 const pixelsPerCell = 4,
   cols = Math.ceil(window.innerWidth / pixelsPerCell),
@@ -19,19 +13,28 @@ const pixelsPerCell = 4,
   renderer = new Renderer(cols, rows, pixelsPerCell, pixelsPerCell),
   options = new Options(),
   initializer = new Initializer(options, renderer),
+  recorder = new Recorder(() => {
+    options.model.isRecording = false;
+    engine.pause();
+  }),
   engine = new Engine(
     cols, //number of columns
     rows, //number of rows
     onNextState,
     30, //desired fps
-    initializer
-  ),
-  recorder = new Recorder(() => (options.model.isRecording = false));
+    initializer,
+    () => {
+      if (options.model.isRecording) {
+        recorder.start(options.model.recordingTime);
+        recorder.addFrame(renderer.canvas);
+      }
+    }
+  );
 
 function onNextState(world: World, diff: any) {
   renderer.render(world, diff);
   if (options.model.isRecording) {
-    recorder.addFrame(renderer.context);
+    recorder.addFrame(renderer.canvas);
   }
 }
 
@@ -39,9 +42,9 @@ window.addEventListener("load", () => {
   function reset() {
     renderer.reset(options.model);
     startTime = performance.now();
-    if (options.model.isRecording) {
-      recorder.start(options.model.recordingTime);
-    }
+    // if (options.model.isRecording) {
+    //   // recorder.start(options.model.recordingTime);
+    // }
     engine.start(options.model);
   }
   document.onkeydown = ev => {

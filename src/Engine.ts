@@ -1,5 +1,5 @@
 import World from "./World";
-import { Model } from "./Options";
+import Options, { Model } from "./Options";
 import Initializer from "./Initializer";
 
 export default class Engine {
@@ -21,19 +21,23 @@ export default class Engine {
   targetFps: number;
   currentFps: number;
   encoder: any;
+  engineWillStart: any;
+  model: Model;
 
   constructor(
     cols: number,
     rows: number,
     onTick: any,
     desiredFps: number,
-    initializer: Initializer
+    initializer: Initializer,
+    engineWillStart: any
   ) {
     this.cols = cols;
     this.rows = rows;
     this.targetFps = desiredFps;
     this.onTick = onTick;
     this.initializer = initializer;
+    this.engineWillStart = engineWillStart;
   }
 
   computeNextState(): Set<any> {
@@ -64,24 +68,27 @@ export default class Engine {
   }
 
   tick() {
-    const startTime = performance.now(),
-      msElapsed = startTime - this.lastTickTime;
-    this.msTillNextFrame -= msElapsed;
-    if (this.msTillNextFrame <= 0) {
+    if (this.model.isRecording) {
       const diff = this.computeNextState();
       this.onTick(this.currentWorld, diff);
-      this.lastTickTime = performance.now();
-      const timeForFrame = this.lastTickTime - startTime;
-      if (this.currentFps < this.targetFps) {
-        this.currentFps += 0.5;
-        this.calculateMsPerFrame();
-        // console.log(`fps: ${this.currentFps}`);
-      }
-      this.msTillNextFrame = this.msPerFrame - timeForFrame;
     } else {
-      this.lastTickTime = performance.now();
+      const startTime = performance.now(),
+        msElapsed = startTime - this.lastTickTime;
+      this.msTillNextFrame -= msElapsed;
+      if (this.msTillNextFrame <= 0) {
+        const diff = this.computeNextState();
+        this.onTick(this.currentWorld, diff);
+        this.lastTickTime = performance.now();
+        const timeForFrame = this.lastTickTime - startTime;
+        if (this.currentFps < this.targetFps) {
+          this.currentFps += 0.5;
+          this.calculateMsPerFrame();
+        }
+        this.msTillNextFrame = this.msPerFrame - timeForFrame;
+      } else {
+        this.lastTickTime = performance.now();
+      }
     }
-
     if (this.isRunning) window.requestAnimationFrame(this.tick.bind(this));
   }
 
@@ -94,6 +101,7 @@ export default class Engine {
     }
 
     this.randomStart = model.randomStart;
+    this.model = model;
   }
 
   calculateMsPerFrame() {
@@ -107,14 +115,16 @@ export default class Engine {
     this.nextWorld = new World(this.rows, this.cols);
     this.currentFps = 20;
     this.calculateMsPerFrame();
-    
+
     this.initializer.init(this.currentWorld).then(() => {
-      this.isRunning = true;     
+      this.isRunning = true;
       window.requestAnimationFrame(this.tick.bind(this));
+      this.engineWillStart();
     });
   }
 
   pause() {
+    console.log("pause");
     this.isRunning = false;
   }
 

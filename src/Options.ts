@@ -28,7 +28,7 @@ export default class Options {
       "#FFFFFF",
       "#FFFFFF"
     ],
-    recordingTime: 4000,
+    recordingTime: 8000,
     isRecording: false
   };
   constructor() {

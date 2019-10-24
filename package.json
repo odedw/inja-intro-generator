@@ -39,6 +39,7 @@
   },
   "version": "0.0.1",
   "dependencies": {
+    "ccapture.js": "^1.1.0",
     "dat.gui": "^0.7.6"
   }
 }
